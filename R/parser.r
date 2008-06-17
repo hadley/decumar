@@ -1,17 +1,4 @@
 # Requires highlight command line script
-l(plyr)
-
-block_types <- toupper(c(
-  "defaults", # Set up default parameters for the remainder of the file
-  "figure",   # Insert a floating figure containing graphics
-  "graphic",  # Insert a graphic into the document
-  "tabular",  # Insert a table
-  "table",    # Insert a floating table containing data
-  "output",   # Include output 
-  "raw",      # Include output (unescaped) 
-  "listing",  # Pretty print code
-  "interweave"     # Output and listing interwoven
-))
 
 re <- function(string, regexp) {
   seq_along(string) %in% grep(regexp, as.character(string))
@@ -87,26 +74,3 @@ print.block <- function(x, ...) {
   cat("\n", indent(x$code), "\n\n", sep="")
 }
 
-
-process_file <- function(path) {
-  lines <- readLines(path, warn=FALSE)
-  grp <- c(0,cumsum(diff(is.comment(lines)) != 0))
-  groups <- unname(split(lines, grp))
-
-  blks <- which(is.block(groups))
-  ends <- which(is.end(groups))
-
-
-  blk_with_end <- blks[(blks + 2) %in% ends]
-  if (length(blk_with_end) > 0)
-    groups <- groups[-c(blk_with_end + 1, blk_with_end + 2)]
-
-  blocks <- lapply(groups[is.block(groups)], parse_block)
-
-  ps(ps(laply(groups, group_output), collapse="\n"), "\n")
-}
-
-overwrite_file <- function(path) {
-  output <- process_file(path)
-  cat(output, file = path)
-}
