@@ -1,0 +1,38 @@
+\documentclass[letterpaper]{scrartcl}
+\input{highlight}
+\usepackage{alltt}
+
+\begin{document}
+
+% INTERWEAVE
+%
+% a <- 10
+% a
+% qplot(mpg, wt, data=mtcars)
+\begin{alltt}
+
+
+> a <- 10 
+
+> a 
+[1] 10
+> qplot(mpg, wt, data=mtcars) 
+
+\includegraphics[scale=0.5]{54d5b5a95badb06ff2339bfd51826af0}
+
+\end{alltt}
+
+\begin{alltt}
+> qplot(percwhite, percbelowpoverty, data = midwest, geom = c("point", 
++     "smooth"), method = lm)
+\includegraphics[scale=0.5]{54d5b5a95badb06ff2339bfd51826af0}
+
+> qplot(percwhite, percbelowpoverty, data = midwest, size = popdensity, 
++     weight = popdensity, geom = c("point", "smooth"), method = lm)
+\includegraphics[scale=0.5]{3353081c3ffa3fd62b69fb2c0aef9142}
+
+\end{alltt}
+% END
+
+    
+\end{document}
