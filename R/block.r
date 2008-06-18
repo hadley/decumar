@@ -1,5 +1,5 @@
 block_types <- toupper(c(
-  "defaults", # Set up default parameters for the remainder of the file
+  "set_defaults", # Set up default parameters for the remainder of the file
   "figure",   # Insert a floating figure containing graphics
   "graphic",  # Insert a graphic into the document
   "tabular",  # Insert a table
@@ -16,6 +16,7 @@ block_call <- function(block) {
   params <- reshape::defaults(params, .defaults)
   
   res <- do.call(block$type, params)
+  if (res == "") return()
   if (params$inline) return(indent(res, block$indent))
   
   outdir <- params$outdir

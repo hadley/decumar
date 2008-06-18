@@ -1,7 +1,11 @@
 figure <- function(code, ...) {
   woven <- weave(code, parent.frame())  
   
-  weave_figure <- weave_graphics
+  weave_figure <- weave_nul
+  weave_figure$value <- function(x, ...) {
+    if (!inherits(x, "ggplot")) return()
+    save_plot_tex(x, comment = TRUE, ...)
+  }
   weave_figure$start <- start_figure
   weave_figure$stop <- end_figure
   

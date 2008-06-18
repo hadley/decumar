@@ -11,7 +11,7 @@ graphic <- function(code, ...) {
 }
 
 save_plot_tex <- function(
-  x, outdir, 
+  x, outdir, comment = FALSE,
   cache = FALSE,
   gg_width = NULL, gg_height = NULL, 
   tex_width = NULL, tex_height = NULL, ...
@@ -22,7 +22,9 @@ save_plot_tex <- function(
     ggsave(x, filename = path, width = gg_width, height = gg_height)      
   }
   
-  ps(indent(image_tex(path, width=tex_width, height=tex_height)), "%")
+  out <- indent(image_tex(path, width=tex_width, height=tex_height))
+  if (comment) out <- ps(out, "%")
+  out
 }
 
 # Include graphics in a latex file

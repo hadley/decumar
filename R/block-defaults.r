@@ -6,7 +6,9 @@
 )
 
 set_defaults <- function(code, ...) {
-  .defaults <<- list(...)
+  .defaults <<- defaults(list(...), .defaults)
+  woven <- weave(code, parent.frame())  
+  ""
 }
 
 
