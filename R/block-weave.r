@@ -6,9 +6,9 @@ interweave <- function(code, ...) {
 
 weave_all <- list(
   start = function(...) "\\begin{alltt}\n",
-  message = function(x, ...) ps("\\{bf", x, "\\}") ,
-  warning = function(x, ...) ps("\\{bf WARNING}: ", x) ,
-  error = function(x, ...) ps("\\{bf ERROR}: ", x) ,
+  message = function(x, ...) ps("{\\bf", x, "\\}") ,
+  warning = function(x, ...) ps("{\\bf WARNING}: ", x) ,
+  error = function(x, ...) ps("{\\bf ERROR}: ", x) ,
   out = function(x, ...) escape_tex(x),
   src = function(x, ...) {
     escape_tex(line_prompt(x))

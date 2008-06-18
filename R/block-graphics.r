@@ -19,7 +19,7 @@ save_plot_tex <- function(
   path <- file.path(outdir, ps(digest.ggplot(x), ".pdf"))
   
   if (!cache || !file.exists(path)) {
-    ggsave(x, filename = path, width = gg_width, height = gg_height)      
+    try(ggsave(x, filename = path, width = gg_width, height = gg_height))
   }
   
   out <- indent(image_tex(path, width=tex_width, height=tex_height))
