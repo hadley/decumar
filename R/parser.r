@@ -22,13 +22,11 @@ indent <- function(x, n = 2) {
   ps(spaces, gsub("\n", ps("\n", spaces), x))
 }
 
-
-
 strip_comment <- function(x) {
   indent <- nchar(strsplit(x[1], "%")[[1]][1])
   
   structure(
-    laply(x, function(x) gsub("\\s*% ?", "", x)),
+    laply(x, function(x) gsub("^\\s*% ?", "", x)),
     indent = indent
   )
 }
@@ -74,3 +72,19 @@ print.block <- function(x, ...) {
   cat("\n", indent(x$code), "\n\n", sep="")
 }
 
+
+parse_file <- function(path) {
+  lines <- readLines(path, warn=FALSE)
+  grp <- c(0,cumsum(diff(is.comment(lines)) != 0))
+  groups <- unname(split(lines, grp))
+
+  blks <- which(is.block(groups))
+  ends <- which(is.end(groups))
+
+
+  blk_with_end <- blks[(blks + 2) %in% ends]
+  if (length(blk_with_end) > 0)
+    groups <- groups[-c(blk_with_end + 1, blk_with_end + 2)]
+  
+  groups
+}

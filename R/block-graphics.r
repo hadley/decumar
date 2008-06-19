@@ -1,5 +1,5 @@
-graphic <- function(code, ...) {
-  woven <- weave(code, parent.frame())  
+graphic <- function(code, ..., envir = globalenv()) {
+  woven <- weave(code, envir)  
   
   weave_graphics <- weave_nul
   weave_graphics$value <- function(x, ...) {

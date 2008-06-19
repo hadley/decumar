@@ -13,18 +13,41 @@ block_types <- toupper(c(
 
 block_call <- function(block) {
   params <- c(list(code = block$code), block$params)
-  params <- reshape::defaults(params, .defaults)
+  params <- defaults(params, .defaults)
+
+  hash <- digest(block)
+  if (params$cache && block$type != "set_defaults") {
+    hit <- cache_get(hash)
+    if (!is.null(hit)) {
+      # cat("\nCache hit: ", hash, "\n")
+      return(hit)
+    }
+    cat("\nCache miss: ", hash, "\n")
+  }
+  # cache_set(hash, all)
   
   res <- do.call(block$type, params)
-  if (res == "") return()
-  if (params$inline) return(indent(res, block$indent))
+  if (res == "") {
+    cache_set(hash, "")
+    return()
+  }
+
+  if (params$inline) {
+    result <- indent(res, block$indent)
+    cache_set(hash, result)
+    return(result)
+  }
   
   outdir <- params$outdir
   if (!file.exists(outdir)) dir.create(outdir, recursive = TRUE)
   path <- file.path(outdir, ps(digest(res), ".tex"))
   cat(res, file = path)
-  indent(ps("\\input{", path, "}"), block$indent)
+  
+  result <- indent(ps("\\input{", path, "}"), block$indent)
+  cache_set(hash, result)
+  result  
 }
+
 
 block_output <- function(block) {
   input <- ps(block$input, collapse = "\n")

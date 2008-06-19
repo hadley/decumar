@@ -1,7 +1,10 @@
 
-interweave <- function(code, ...) {
-  woven <- weave(code, parent.frame())  
-  paste(weave_out(woven, weave_all, ...), collapse="\n")
+interweave <- function(code, ..., envir = globalenv()) {
+  woven <- weave(code, envir)  
+  
+  strings <- weave_out(woven, weave_all, ...)
+  strings <- strings[strings != ""]
+  paste(strings, collapse="\n")
 }
 
 weave_all <- list(
