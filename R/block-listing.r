@@ -1,3 +1,8 @@
 listing <- function(code, ...) {
-  highlight_latex(code)
+  ps(
+    "\\begin{lstlisting}[language = R]\n",
+    code,
+    "\\end{lstlisting}"
+  )
+  # highlight_tex(code)
 }
