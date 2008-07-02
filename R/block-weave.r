@@ -12,13 +12,10 @@ weave_all <- list(
   warning = function(x, ...) ps("{\\bf WARNING}: ", x) ,
   error = function(x, ...) ps("{\\bf ERROR}: ", x) ,
   out = function(x, ...) escape_tex(x),
-  src = function(x, ...) {
-    escape_tex(line_prompt(x))
-  },
+  src = function(x, ...) escape_tex(line_prompt(x)),
   value = function(x, ...) {
     if (inherits(x, "ggplot")) {
-      
-      return(save_plot_tex(x, ...))
+      return(ps(save_plot_tex(x, ...), "\n"))
     }
     escape_tex(capture.output(print(x)))
   },

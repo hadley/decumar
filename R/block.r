@@ -22,7 +22,7 @@ block_call <- function(block) {
       # cat("\nCache hit: ", hash, "\n")
       return(hit)
     }
-    cat("\nCache miss: ", hash, "\n")
+    # cat("\nCache miss: ", hash, "\n")
   }
   # cache_set(hash, all)
   
