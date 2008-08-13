@@ -8,7 +8,8 @@ process_file <- function(path) {
   ps(ps(laply(groups, group_output, .progress="text"), collapse="\n"), "\n")
 }
 
-overwrite_file <- function(path) {
+overwrite_file <- function(path, complete = FALSE) {
+  if (complete) cache_clear()
   output <- process_file(path)
   cat(output, file = path)
 }
