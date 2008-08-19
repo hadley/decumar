@@ -1,0 +1,13 @@
+Package: decumar
+Type: Package
+Title: A sweave alternative
+Version: 0.1
+Date: 2008-08-19
+Author: Hadley Wickham <h.wickham@gmail.com>
+Maintainer: Hadley Wickham <h.wickham@gmail.com>
+Description: 
+URL: http://had.co.nz/plyr
+Depends: R (>= 2.7), plyr, eval.with.details
+Suggests: RUnit, 
+License: GPL
+LazyData: true

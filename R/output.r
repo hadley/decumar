@@ -1,5 +1,3 @@
-
-
 process_file <- function(path) {
   groups <- parse_file(path)
 
