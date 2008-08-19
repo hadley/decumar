@@ -1,10 +1,12 @@
-figure <- function(code, ..., envir = globalenv()) {
+figure <- function(code, ..., col = 2, envir = globalenv()) {
   woven <- weave(code, envir)  
   
+  i <- 0
   weave_figure <- weave_nul
   weave_figure$value <- function(x, ...) {
+    i <<- i + 1
     if (!inherits(x, "ggplot")) return()
-    save_plot_tex(x, comment = TRUE, ...)
+    save_plot_tex(x, comment = (i %% col != 0), ...)
   }
   weave_figure$start <- start_figure
   weave_figure$stop <- end_figure
