@@ -1,11 +1,9 @@
-
-
 process_file <- function(path) {
   groups <- parse_file(path)
 
   blocks <- llply(groups[is.block(groups)], parse_block)
 
-  ps(ps(laply(groups, group_output, .progress="text"), collapse="\n"), "\n")
+  ps(ps(laply(groups, group_output, progress.="text"), collapse="\n"), "\n")
 }
 
 overwrite_file <- function(path, complete = FALSE) {
