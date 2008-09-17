@@ -9,15 +9,18 @@ interweave <- function(code, ..., envir = globalenv()) {
 weave_all <- list(
   start = function(...) "\\begin{alltt}\n",
   message = function(x, ...) ps("{\\bf", x, "\\}") ,
-  warning = function(x, ...) ps("{\\bf WARNING}: ", x) ,
-  error = function(x, ...) ps("{\\bf ERROR}: ", x) ,
+  warning = function(x, ...) ps("WARNING: ", x, "\n") ,
+  error = function(x, ...) ps("ERROR: ", x, "\n") ,
   out = function(x, ...) escape_tex(x),
   src = function(x, ...) escape_tex(line_prompt(x)),
   value = function(x, ...) {
     if (inherits(x, "ggplot")) {
       return(ps(save_plot_tex(x, ...), "\n"))
     }
-    escape_tex(capture.output(print(x)))
+    out <- capture.output(print(x))
+    out <- paste(out, collapse="\n")
+    out <- paste(out, "\n", sep="")
+    escape_tex(out)
   },
   stop = function(...) "\\end{alltt}\n"
 )
