@@ -1,6 +1,6 @@
 figure <- function(code, ..., col = 2, envir = globalenv()) {
   woven <- weave(code, envir)  
-  
+
   i <- 0
   weave_figure <- weave_all
   weave_figure$value <- function(x, ...) {
