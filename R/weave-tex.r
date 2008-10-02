@@ -25,10 +25,10 @@ weave_tex <- list(
 # @keyword misc
 # @seealso \url{http://ebooks.du.ac.in/latex/ltx-164.html}
 escape_tex <- function(x, newlines = FALSE) {
-	x <- gsub("\\\\", "$\\backslash$", x)
-	x <- gsub("([#$%&_{}])", "\\\\\\1", x)
-	if (newlines) x <- gsub("\n", " \\\\\\\\ \n", x)
-	x
+  x <- gsub("\\\\", "$\\backslash$", x)
+  x <- gsub("([#$%&_{}])", "\\\\\\1", x)
+  if (newlines) x <- gsub("\n", " \\\\\\\\ \n", x)
+  x
 }
 
 save_plot_tex <- function(
@@ -49,7 +49,7 @@ save_plot_tex <- function(
 }
 
 highlight_tex <- function(x) {
-	ps(system("highlight -L --quiet --syntax r -f", intern=TRUE, input=x), collapse="\n")
+  ps(system("highlight -L --quiet --syntax r -f", intern=TRUE, input=x), collapse="\n")
 }
 
 
@@ -68,9 +68,9 @@ highlight_tex <- function(x) {
 image_tex <- function(path, width=NULL, height=NULL, ...) {
   options <- compact(list(width = width, height = height))
   options_str <- paste(names(options), options, sep="=", collapse=", ")
-	options_str <- paste("[", options_str, "]", sep="")
-	
-	paste("\\includegraphics", options_str, "{", strip_extension(path), "}", sep="")
+  options_str <- paste("[", options_str, "]", sep="")
+  
+  paste("\\includegraphics", options_str, "{", strip_extension(path), "}", sep="")
 }
 
 strip_extension <- function(x) {

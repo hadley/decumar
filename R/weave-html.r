@@ -1,5 +1,3 @@
-
-
 weave_html <- list(
   start = function(...) "<pre>\n",
   message = function(x, ...) ps("<strong>", x, "</strong>"),
@@ -27,13 +25,13 @@ weave_html <- list(
 # @arguments if true, make html newlines
 # @keyword misc
 escape_html <- function(x, newlines = FALSE) {
-	x <- gsub(">", "&gt;", gsub("<", "&lt;", x))
-	if (newlines) x <- gsub("\n", " <br />\n", x)
-	x
+  x <- gsub(">", "&gt;", gsub("<", "&lt;", x))
+  if (newlines) x <- gsub("\n", " <br />\n", x)
+  x
 }
 
 highlight_html <- function(x) {
-	ps(system("highlight --syntax r --quiet --wrap-simple -f", intern=TRUE, input=x), collapse="\n")
+  ps(system("highlight --syntax r --quiet --wrap-simple -f", intern=TRUE, input=x), collapse="\n")
 }
 
 
@@ -42,12 +40,12 @@ highlight_html <- function(x) {
 #
 # @keyword internal
 image_html <- function(path, width=NULL, height=NULL, ...) {
-	paste(
-	  "<img src='", path, "' ", 
-	        "width = '", width, "' ", 
-	        "height = '", height, "' ", 
-	        "alt = '' />", 
-	  sep="", collapse="\n")
+  paste(
+    "<img src='", path, "' ", 
+          "width = '", width, "' ", 
+          "height = '", height, "' ", 
+          "alt = '' />", 
+    sep="", collapse="\n")
 }
 
 
