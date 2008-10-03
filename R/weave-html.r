@@ -1,7 +1,7 @@
 weave_html <- list(
   start = function(...) "<pre>\n",
   message = function(x, ...) ps("<strong>", x, "</strong>\n"),
-  warning = function(x, ...) ps("<strong>Warning: ", gsub("\n$", x), "</strong>\n"),
+  warning = function(x, ...) ps("<strong>Warning: ", gsub("\n$", "", x), "</strong>\n"),
   error = function(x, ...) ps("<strong>Error: ", x, "</strong>\n"),
   out = function(x, ...) escape_html(x),
   src = function(x, ...) line_prompt(highlight_html(x), "&gt; "),
