@@ -6,11 +6,10 @@ weave_r <- list(
     message(gsub("\n^", "", x))
   },
   warning = function(x, call, ...) {
-    message("Warning in ", deparse(call), " : ", x)
+    message("Warning message:\n", x)
   },
   error = function(x, call, ...) {
-    message("Error in ", deparse(call), " : ", x)
-    
+    message("Error in ", deparse(call), " : ", x)    
   },
   out = function(x, ...) {
     cat(x)
