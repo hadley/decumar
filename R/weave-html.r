@@ -49,10 +49,10 @@ image_html <- function(path, width=NULL, height=NULL, ...) {
 }
 
 
-save_plot_html <- function(x, outdir, width = 7, height = 5, cache = FALSE, ...) {
+save_plot_html <- function(x, outdir = NULL, width = 7, height = 5, cache = FALSE, ...) {
   path <- file.path(outdir, ps(digest.ggplot(x), ".png"))
   
-  if (!cache || !file.exists(path)) {
+  if (!is.null(outdir) && (!cache || !file.exists(path))) {
     try(ggsave(x, filename = path, width = width, height = height))
   }
   
