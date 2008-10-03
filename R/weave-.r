@@ -25,9 +25,7 @@ weave_out <- function(x, format, ...) {
 }
 
 weave_out_single <- function(x, f, ...) {
-  visible <- !is.null(x$visible) && x$visible
-  
-  out <- f$src(x$src, !visible)
+  out <- f$src(x$src)
 
   out <- paste(out, lapply(x$output, function(x) {
     if (inherits(x, "message")) {
@@ -41,7 +39,7 @@ weave_out_single <- function(x, f, ...) {
     }
   }), collapse = "", sep="")
   
-  if(visible) {
+  if(!is.null(x$visible) && x$visible) {
     out <- paste(out, f$value(x$value, ...), sep="")
   }
   out
