@@ -1,13 +1,16 @@
 weave_html <- list(
   start = function(...) "<pre>\n",
-  message = function(x, ...) ps("<strong>", x, "</strong>"),
-  warning = function(x, ...) ps("<strong>Warning: ", x, "</strong>"),
-  error = function(x, ...) ps("<strong>Error: ", x, "</strong>"),
+  message = function(x, ...) ps("<strong>", x, "</strong>\n"),
+  warning = function(x, ...) ps("<strong>Warning: ", gsub("\n$", x), "</strong>\n"),
+  error = function(x, ...) ps("<strong>Error: ", x, "</strong>\n"),
   out = function(x, ...) escape_html(x),
   src = function(x, ...) line_prompt(highlight_html(x), "&gt; "),
   value = function(x, ...) {
     if (inherits(x, "ggplot")) {
-      return(ps(save_plot_html(x, ...), "\n"))
+      details <- eval.with.details(expression(save_plot_html(x, ...)))
+      
+      out <- weave_out_output(details$output, weave_html)
+      return(paste(out, details$value, "\n", collapse=""))
     }
     out <- capture.output(print(x))
     out <- paste(out, collapse="\n")
@@ -53,7 +56,7 @@ save_plot_html <- function(x, outdir = NULL, width = 7, height = 5, cache = FALS
   path <- file.path(outdir, ps(digest.ggplot(x), ".png"))
   
   if (!is.null(outdir) && (!cache || !file.exists(path))) {
-    try(ggsave(x, filename = path, width = width, height = height))
+    ggsave(x, filename = path, width = width, height = height)
   }
   
   image_html(path, width = width * 72, height = height * 72)

@@ -27,7 +27,16 @@ weave_out <- function(x, format, ...) {
 weave_out_single <- function(x, f, ...) {
   out <- f$src(x$src)
 
-  out <- paste(out, lapply(x$output, function(x) {
+  out <- paste(out, weave_out_output(x$output, f, ...), sep="")
+  
+  if(!is.null(x$visible) && x$visible) {
+    out <- paste(out, f$value(x$value, ...), sep="")
+  }
+  out
+}
+
+weave_out_output <- function(output, f, ...) {
+  paste(lapply(output, function(x) {
     if (inherits(x, "message")) {
       f$message(x$message, ...)
     } else if (inherits(x, "warning")) {
@@ -38,11 +47,6 @@ weave_out_single <- function(x, f, ...) {
       f$out(x, ...)
     }
   }), collapse = "", sep="")
-  
-  if(!is.null(x$visible) && x$visible) {
-    out <- paste(out, f$value(x$value, ...), sep="")
-  }
-  out
 }
 
 "print.ewd-list" <- function(x, ...) {
