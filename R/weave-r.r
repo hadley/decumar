@@ -23,17 +23,13 @@ weave_r <- list(
 
 
 
-line_prompt <- function(x, prompt = options("prompt"), continue = options("continue"), ..., is.expr = TRUE) {
+line_prompt <- function(x, prompt = options("prompt"), continue = options("continue"), ...) {
   lines <- strsplit(x, "\n")[[1]]
   n <- length(lines)
 
-  if (is.expr) {
-    lines[1] <- paste(prompt, lines[1], sep="")
-    if (n > 1)
-      lines[2:n] <- paste(continue, lines[2:n], sep="")    
-  } else {
-    lines <- paste(prompt, lines, sep="")
-  }
+  lines[1] <- paste(prompt, lines[1], sep="")
+  if (n > 1)
+    lines[2:n] <- paste(continue, lines[2:n], sep="")    
   
   paste(lines, "\n", collapse="")
 }
