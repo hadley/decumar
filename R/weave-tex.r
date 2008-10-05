@@ -1,8 +1,15 @@
+interweave_tex <- function(code, ..., envir = globalenv()) {
+  woven <- weave(code, envir)  
+  
+  strings <- weave_out(woven, weave_tex, ...)
+  paste(strings, collapse="")
+}
+
 weave_tex <- list(
   start = function(...) "\\begin{alltt}\n",
-  message = function(x, ...) ps("{\\bf", x, "\\}") ,
-  warning = function(x, ...) ps("WARNING: ", x, "\n") ,
-  error = function(x, ...) ps("ERROR: ", x, "\n") ,
+  message = function(x, ...) ps("{\\bf", escape_tex(x), "\\}") ,
+  warning = function(x, ...) ps("WARNING: ", escape_tex(x), "\n") ,
+  error = function(x, ...) ps("ERROR: ", escape_tex(x), "\n") ,
   out = function(x, ...) escape_tex(x),
   src = function(x, ...) escape_tex(line_prompt(x)),
   value = function(x, ...) {

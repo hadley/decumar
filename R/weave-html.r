@@ -1,3 +1,10 @@
+interweave_html <- function(code, ..., envir = globalenv()) {
+  woven <- weave(code, envir)  
+  
+  strings <- weave_out(woven, weave_html, ...)
+  paste(strings, collapse="")
+}
+
 weave_html <- list(
   start = function(...) "<pre>\n",
   message = function(x, ...) ps("<strong>", x, "</strong>\n"),
