@@ -40,11 +40,11 @@ escape_tex <- function(x, newlines = FALSE) {
 
 save_plot_tex <- function(
   x, outdir, comment = FALSE,
-  cache = FALSE,
+  cache = FALSE, filetype = "pdf",
   gg_width = NULL, gg_height = NULL, 
   tex_width = NULL, tex_height = NULL, ...
 ) {
-  path <- file.path(outdir, ps(digest.ggplot(x), ".pdf"))
+  path <- file.path(outdir, ps(digest.ggplot(x), ".", filetype))
   
   if (!cache || !file.exists(path)) {
     try(ggsave(x, filename = path, width = gg_width, height = gg_height))
