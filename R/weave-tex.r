@@ -14,7 +14,10 @@ weave_tex <- list(
   src = function(x, ...) escape_tex(line_prompt(x)),
   value = function(x, ...) {
     if (inherits(x, "ggplot")) {
-      return(ps(save_plot_tex(x, ...), "\n"))
+      details <- eval.with.details(expression(save_plot_tex(x, ...)))
+      
+      out <- weave_out_output(details$output, weave_tex)
+      return(paste(out, details$value, "\n", collapse=""))
     }
     out <- capture.output(print(x))
     out <- paste(out, collapse="\n")
@@ -32,7 +35,7 @@ weave_tex <- list(
 # @keyword misc
 # @seealso \url{http://ebooks.du.ac.in/latex/ltx-164.html}
 escape_tex <- function(x, newlines = FALSE) {
-  x <- gsub("\\\\", "$\\backslash$", x)
+  x <- gsub("\\\\", "\\\\verb|\\\\|", x)
   x <- gsub("([#$%&_{}])", "\\\\\\1", x)
   if (newlines) x <- gsub("\n", " \\\\\\\\ \n", x)
   x

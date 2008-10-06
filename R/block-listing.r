@@ -1,7 +1,7 @@
 listing <- function(code, ...) {
   ps(
     "\\begin{alltt}\n",
-    code,
+    escape_tex(code),
     "\\end{alltt}\n"
   )
   # highlight_tex(code)
