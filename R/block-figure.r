@@ -6,7 +6,11 @@ figure <- function(code, ..., col = 2, envir = globalenv()) {
   weave_figure$value <- function(x, ...) {
     i <<- i + 1
     if (!inherits(x, "ggplot")) return()
-    save_plot_tex(x, comment = (i %% col != 0), ...)
+
+    details <- eval.with.details(expression(save_plot_tex(x, ..., comment = i %% col)))
+    
+    out <- weave_out_output(details$output, weave_tex)
+    return(indent(paste(out, details$value, sep="", collapse="\n")))
   }
   weave_figure$out <- nul
   weave_figure$src <- nul
@@ -25,12 +29,12 @@ figure <- function(code, ..., col = 2, envir = globalenv()) {
 start_figure <- function(position = "htbp", ...) {
   ps(
     "\\begin{figure}[", position, "]\n",
-    "\\centering\n"
+    indent("\\centering")
   )
 }
 end_figure <- function(caption, label, ...) {
-  ps("\n", indent(ps(
-    "\\label{fig:", label, "}\n",
-    "\\caption{", caption, "}"
+  ps(indent(ps(
+    "\\caption{", caption, "}\n",
+    "\\label{fig:", label, "}"
   )), "\n\\end{figure}\n")
 }

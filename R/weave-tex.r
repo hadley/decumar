@@ -17,7 +17,7 @@ weave_tex <- list(
       details <- eval.with.details(expression(save_plot_tex(x, ...)))
       
       out <- weave_out_output(details$output, weave_tex)
-      return(paste(out, details$value, "\n", collapse=""))
+      return(indent(paste(out, details$value, "\n", collapse="")))
     }
     out <- capture.output(print(x))
     out <- paste(out, collapse="\n")
@@ -44,16 +44,17 @@ escape_tex <- function(x, newlines = FALSE) {
 save_plot_tex <- function(
   x, outdir, comment = FALSE,
   cache = FALSE, filetype = "pdf",
-  gg_width = NULL, gg_height = NULL, 
+  gg_width = NULL, gg_height = NULL, dpi = 300,
   tex_width = NULL, tex_height = NULL, ...
 ) {
-  path <- file.path(outdir, ps(digest.ggplot(x), ".", filetype))
+  name <- ps(digest.ggplot(x), ".", filetype)
+  path <- file.path(outdir, name)
   
   if (!cache || !file.exists(path)) {
-    try(ggsave(x, filename = path, width = gg_width, height = gg_height))
+    try(ggsave(x, filename = path, width = gg_width, height = gg_height, dpi = dpi))
   }
   
-  out <- indent(image_tex(path, width=tex_width, height=tex_height))
+  out <- image_tex(name, width=tex_width, height=tex_height)
   if (comment) out <- ps(out, "%")
   out
 }
