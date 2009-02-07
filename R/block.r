@@ -1,13 +1,14 @@
 block_types <- toupper(c(
   "set_defaults", # Set up default parameters for the remainder of the file
-  "figure",   # Insert a floating figure containing graphics
-  "graphic",  # Insert a graphic into the document
-  "tabular",  # Insert a table
-  "table",    # Insert a floating table containing data
-  "output",   # Include output 
-  "raw",      # Include output (unescaped) 
-  "listing",  # Pretty print code
-  "interweave"     # Output and listing interwoven
+  "figure",       # Insert a floating figure containing graphics
+  "figlisting",   # Floating figure + code
+  "graphic",      # Insert a graphic into the document
+  "tabular",      # Insert a table
+  "table",        # Insert a floating table containing data
+  "output",       # Include output 
+  "raw",          # Include output (unescaped) 
+  "listing",      # Pretty print code
+  "interweave"    # Output and listing interwoven
 ))
 
 
