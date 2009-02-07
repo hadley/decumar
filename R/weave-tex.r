@@ -35,8 +35,8 @@ weave_tex <- list(
 # @keyword misc
 # @seealso \url{http://ebooks.du.ac.in/latex/ltx-164.html}
 escape_tex <- function(x, newlines = FALSE) {
-  x <- gsub("\\\\", "\\\\verb|\\\\|", x)
-  x <- gsub("([#$%&{}])", "\\\\\\1", x)
+  x <- gsub("([\\{}])", "\\\\verb|\\1|", x)
+  x <- gsub("([#$%&])", "\\\\\\1", x)
   if (newlines) x <- gsub("\n", " \\\\\\\\ \n", x)
   x
 }
