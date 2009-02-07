@@ -6,18 +6,18 @@ figure <- function(code, ..., col = 2, envir = globalenv()) {
   weave_figure$value <- function(x, ...) {
     i <<- i + 1
     if (!inherits(x, "ggplot")) return()
+    # Figures ignore warnings and errors
 
-    details <- eval.with.details(expression(save_plot_tex(x, ..., comment = i %% col)))
-    
-    out <- weave_out_output(details$output, weave_tex)
-    return(indent(paste(out, details$value, sep="", collapse="\n")))
+    indent(save_plot_tex(x, ..., comment = i %% col))
   }
   weave_figure$out <- nul
   weave_figure$src <- nul
   weave_figure$start <- start_figure
   weave_figure$stop <- end_figure
   
-  paste(weave_out(woven, weave_figure, ...), collapse="\n")
+  pieces <- weave_out(woven, weave_figure, ...)
+  pieces <- pieces[pieces != ""]
+  paste(pieces, collapse="\n")
 }
 
 # \begin{figure}[htbp]

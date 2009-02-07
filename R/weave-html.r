@@ -62,9 +62,9 @@ image_html <- function(path, width=NULL, height=NULL, ...) {
 save_plot_html <- function(x, outdir = NULL, width = 7, height = 5, cache = FALSE, ...) {
   path <- file.path(outdir, ps(digest.ggplot(x), ".png"))
   
-  if (!is.null(outdir) && (!cache || !file.exists(path))) {
-    ggsave(x, filename = path, width = width, height = height)
-  }
+  # if (!is.null(outdir) && (!cache || !file.exists(path))) {
+  ggsave(x, filename = path, width = width, height = height, dpi = 72)
+  # }
   
   image_html(path, width = width * 72, height = height * 72)
 }

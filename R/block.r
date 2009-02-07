@@ -19,10 +19,10 @@ block_call <- function(block) {
   if (params$cache && block$type != "set_defaults") {
     hit <- cache_get(hash)
     if (!is.null(hit)) {
-      # cat("\nCache hit: ", hash, "\n")
+      # message("Cache hit: ", hash)
       return(hit)
     }
-    # cat("\nCache miss: ", hash, "\n")
+    # message("Cache miss: ", hash)
   }
   # cache_set(hash, all)
   

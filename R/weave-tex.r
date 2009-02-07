@@ -7,7 +7,7 @@ interweave_tex <- function(code, ..., envir = globalenv()) {
 
 weave_tex <- list(
   start = function(...) "\\begin{alltt}\n",
-  message = function(x, ...) ps("{\\bf", escape_tex(x), "\\}") ,
+  message = function(x, ...) ps("{\\bf ", escape_tex(gsub("\n", "", x)), "}\\\\\n") ,
   warning = function(x, ...) ps("WARNING: ", escape_tex(x), "\n") ,
   error = function(x, ...) ps("ERROR: ", escape_tex(x), "\n") ,
   out = function(x, ...) escape_tex(x),
@@ -17,7 +17,7 @@ weave_tex <- list(
       details <- eval.with.details(expression(save_plot_tex(x, ...)))
       
       out <- weave_out_output(details$output, weave_tex)
-      return(indent(paste(out, details$value, "\n", collapse="")))
+      return(paste(out, details$value, "\n", collapse=""))
     }
     out <- capture.output(print(x))
     out <- paste(out, collapse="\n")
@@ -36,7 +36,7 @@ weave_tex <- list(
 # @seealso \url{http://ebooks.du.ac.in/latex/ltx-164.html}
 escape_tex <- function(x, newlines = FALSE) {
   x <- gsub("\\\\", "\\\\verb|\\\\|", x)
-  x <- gsub("([#$%&_{}])", "\\\\\\1", x)
+  x <- gsub("([#$%&{}])", "\\\\\\1", x)
   if (newlines) x <- gsub("\n", " \\\\\\\\ \n", x)
   x
 }
@@ -50,9 +50,9 @@ save_plot_tex <- function(
   name <- ps(digest.ggplot(x), ".", filetype)
   path <- file.path(outdir, name)
   
-  if (!cache || !file.exists(path)) {
-    try(ggsave(x, filename = path, width = gg_width, height = gg_height, dpi = dpi))
-  }
+  # if (!cache || !file.exists(path)) {
+  try(ggsave(x, filename = path, width = gg_width, height = gg_height, dpi = dpi))
+  # }
   
   out <- image_tex(name, width=tex_width, height=tex_height)
   if (comment) out <- ps(out, "%")
