@@ -35,6 +35,10 @@ parse_block <- function(input) {
   block <- strip_comment(input)
 
   blank <- which(block == "")[1]
+  if(is.na(blank)) {
+    stop("Parse error: No blank line\n\n", paste(input, collapse="\n"),
+      call. = FALSE)
+  }
   type <- trim(block[1])
   params <- trim(paste(block[seq(2, blank - 1)], collapse=" "))
   code <- paste(block[seq(blank + 1, length(block))], collapse="\n")
