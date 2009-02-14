@@ -14,10 +14,11 @@ weave_tex <- list(
   src = function(x, ...) escape_tex(line_prompt(x)),
   value = function(x, ...) {
     if (inherits(x, "ggplot")) {
+      # Doesn't work properly with themes because themes get evaluated
+      # well before plot gets rendered
       details <- eval.with.details(expression(save_plot_tex(x, ...)))
-      
       out <- weave_out_output(details$output, weave_tex)
-      return(paste(out, details$value, "\n", collapse=""))
+      return(paste(out, details$value, "\n", collapse="", sep=""))
     }
     out <- capture.output(print(x))
     out <- paste(out, collapse="\n")
@@ -50,9 +51,7 @@ save_plot_tex <- function(
   name <- ps(digest.ggplot(x), ".", filetype)
   path <- file.path(outdir, name)
   
-  # if (!cache || !file.exists(path)) {
-  try(ggsave(x, filename = path, width = gg_width, height = gg_height, dpi = dpi))
-  # }
+  try(ggsave(path, x, width = gg_width, height = gg_height, dpi = dpi))
   
   out <- image_tex(name, width=tex_width, height=tex_height)
   if (comment) out <- ps(out, "%")

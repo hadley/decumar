@@ -10,7 +10,13 @@ weave <- function(input, envir = parent.frame(), enclos = NULL) {
   
   structure(
     lapply(1:nrow(parsed), function(i) {
-      with(parsed[i,], evaluate(expr[[1]], src[[1]]))
+      x <- with(parsed[i,], evaluate(expr[[1]], src[[1]]))
+      
+      # Ugly hack to save theme state 
+      if (inherits(x$value, "ggplot")) {
+        x$value$options <- plot_theme(x$value)
+      }
+      x
     }),
     class = "ewd-list"
   )
