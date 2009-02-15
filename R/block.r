@@ -1,5 +1,7 @@
 block_types <- toupper(c(
   "set_defaults", # Set up default parameters for the remainder of the file
+  "code",         # Runs code and displays nothing
+  "codelisting",  # Code + listing
   "figure",       # Insert a floating figure containing graphics
   "figlisting",   # Floating figure + code
   "graphic",      # Insert a graphic into the document

@@ -16,7 +16,7 @@ output_code <- function(input, output_path = "") {
   groups <- parse_file(input)
   blocks <- llply(groups[is.block(groups)], parse_block)
   
-  code <- llply(blocks, code)
+  code <- llply(blocks, extract_code)
   output <- paste(code, collapse = "\n")
 
   cat(output, file = output_path)

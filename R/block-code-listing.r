@@ -1,0 +1,4 @@
+codelisting <- function(...) {
+  code(...)
+  listing(...)
+}

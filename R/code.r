@@ -1,4 +1,4 @@
-code <- function(block) {
+extract_code <- function(block) {
   if (block$code == "NA\n") return("")
   caption <- block$params$caption
 
