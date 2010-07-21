@@ -3,11 +3,11 @@ process_file <- function(path) {
 
   blocks <- llply(groups[is.block(groups)], parse_block)
 
-  ps(ps(laply(groups, group_output, .progress="text"), collapse="\n"), "\n")
+  ps(ps(laply(groups, process_group, .progress="text"), collapse="\n"), "\n")
 }
 
 overwrite_file <- function(path, complete = FALSE) {
-  if (complete) cache_clear()
+  if (complete) cache$reset()
   output <- process_file(path)
   cat(output, file = path)
 }

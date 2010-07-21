@@ -1,18 +1,30 @@
-.create_cache <- function() {
-  cache <- list()
+new_cache <- function() {
   
-  get <- function(x) cache[[x]]
-  set <- function(x, value) cache[[x]] <<- value
-  ls <- function(x) names(cache)
-  clear <- function(x) cache <<- list()
+  cache <- NULL
+  cache_reset <- function() {
+    cache <<- new.env(TRUE, emptyenv())
+  }
   
-  list(get=get, set=set, ls=ls, clear=clear)
+  cache_set <- function(key, value) {
+    assign(key, value, env = cache)
+  }
+  
+  cache_get <- function(key) {
+    get(key, env = cache, inherits = FALSE)
+  }
+  
+  cache_has_key <- function(key) {
+    exists(key, env = cache, inherits = FALSE)
+  }
+  
+  cache_reset()
+  list(
+    reset = cache_reset, 
+    set = cache_set, 
+    get = cache_get,
+    has_key = cache_has_key,
+    keys = function() ls(cache)
+  )
 }
 
-if (!exists("cache_set") || is.null(cache_set)) {
-  cache <- .create_cache()
-  cache_get <- cache$get
-  cache_set <- cache$set
-  cache_ls <- cache$ls
-  cache_clear <- cache$clear
-}
+cache <- new_cache()

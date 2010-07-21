@@ -1,26 +1,40 @@
-block_call <- function(block) {
+process_group <- function(group) {
+  if (!is.block(group)[1]) {
+    return(str_c(group, collapse = "\n"))
+  }
+  
+  block <- parse_block(group)
+  input <- str_c(block$input, collapse = "\n")
+  output <- call_block(block)
+  end <- indent("\n% END", block$indent)
+  
+  str_c(input, "\n", output, end)
+}
+
+call_block <- function(block) {
   params <- c(list(code = block$code), block$params)
   params <- defaults(params, .defaults)
 
   # Check cache
   hash <- digest(block)
   if (params$cache && block$type != "set_defaults") {
-    hit <- cache_get(hash)
-    if (!is.null(hit)) return(hit)
+    if (cache$has_key(hash)) {
+      return(cache$get(hash))
+    }
   }
   
   res <- do.call(block$type, params)
   
   # Block evaluated only for its side effects
   if (res == "") {
-    cache_set(hash, "")
+    cache$set(hash, "")
     return()
   }
 
   # If inline, indent and return
   if (params$inline) {
     result <- indent(res, block$indent)
-    cache_set(hash, result)
+    cache$set(hash, result)
     return(result)
   }
   
@@ -31,23 +45,7 @@ block_call <- function(block) {
   cat(res, file = path)
   
   result <- indent(ps("\\input{", path, "}"), block$indent)
-  cache_set(hash, result)
+  cache$set(hash, result)
   result  
 }
 
-
-block_output <- function(block) {
-  input <- ps(block$input, collapse = "\n")
-  output <- block_call(block)
-  end <- indent("\n% END", block$indent)
-  
-  ps(input, "\n", output, end)
-}
-
-group_output <- function(group) {
-  if (is.block(group)[1]) {
-    block_output(parse_block(group))
-  } else {
-    ps(group, collapse="\n")
-  }
-}
