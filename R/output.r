@@ -1,19 +1,32 @@
-process_file <- function(path) {
-  groups <- parse_file(path)
-
-  blocks <- llply(groups[is.block(groups)], parse_block)
-
-  ps(ps(laply(groups, process_group, .progress="text"), collapse="\n"), "\n")
-}
-
-overwrite_file <- function(path, complete = FALSE) {
-  if (complete) cache$reset()
+#' Overwrite input with processed output
+#' 
+#' @param path path to file
+#' @param reset should result cache be emptied before processing?
+#' @export
+decumar <- function(path, clean = FALSE) {
+  if (clean) cache$reset()
   output <- process_file(path)
   cat(output, file = path)
 }
 
-output_code <- function(input, output_path = "") {
-  groups <- parse_file(input)
+#' Process decumar file and return result as string
+#' 
+#' @param path path to file
+#' @export
+process_file <- function(path) {
+  groups <- parse_file(path)
+  results <- unlist(llply(groups, process_group, .progress = "text"))
+
+  str_c(c(results, "\n"), collapse = "\n")
+}
+
+#' Extract code from a decumar file.
+#'
+#' @param path path to file
+#' @param output output file, or \code{""} to print to screen
+#' @export
+output_code <- function(path, output_path = "") {
+  groups <- parse_file(path)
   blocks <- llply(groups[is.block(groups)], parse_block)
   
   code <- llply(blocks, extract_code)
@@ -26,14 +39,12 @@ extract_code <- function(block) {
   if (block$code == "NA\n") return("")
   caption <- block$params$caption
 
-  # output <- "# ----------------------------\n"
-  output <- ""
+  output <- "# ----------------------------\n"
   if (!is.null(caption)) {
-    output <- ps(output, ps(strwrap(caption, prefix = "# "), collapse = "\n"))
-    output <- paste(output, "\n", sep="")
+    comment <- strwrap(caption, prefix = "# ")
+    output <- c(output, comment)
   }
 
-  output <- ps(output, block$code, "\n")
-
-  output
+  output <- c(output, block$code, "\n")
+  str_c(output, collapse = "\n")
 }
