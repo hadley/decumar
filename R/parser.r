@@ -12,8 +12,8 @@ is.end <-  function(x)  {
 }
 
 indent <- function(x, n = 2) {
-  spaces <- ps(rep(" ", length = n))
-  ps(spaces, gsub("\n", ps("\n", spaces), x))
+  spaces <- str_c(rep(" ", length = n))
+  str_c(spaces, gsub("\n", str_c("\n", spaces), x))
 }
 
 strip_comment <- function(x) {

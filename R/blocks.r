@@ -24,7 +24,7 @@ block_code <- function(code, ..., envir = globalenv()) {
 
 #' Show code, but don't evaluate it
 block_listing <- function(code, ...) {
-  ps(
+  str_c(
     "\\begin{alltt}\n",
     escape_tex(code),
     "\\end{alltt}\n"

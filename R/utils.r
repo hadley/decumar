@@ -1,5 +1,3 @@
-ps <- function(..., sep="", collapse="") do.call(paste, compact(list(..., sep=sep, collapse=collapse)))
-
 line_prompt <- function(x, prompt = options("prompt"), continue = options("continue"), ...) {
   lines <- strsplit(x, "\n")[[1]]
   n <- length(lines)

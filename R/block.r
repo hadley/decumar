@@ -42,10 +42,10 @@ call_block <- function(block) {
   # Otherwise save to file and constuct embedding statement
   outdir <- params$outdir
   if (!file.exists(outdir)) dir.create(outdir, recursive = TRUE)
-  path <- file.path(outdir, ps(digest(res), ".tex"))
+  path <- file.path(outdir, str_c(digest(res), ".tex"))
   cat(res, file = path)
   
-  result <- indent(ps("\\input{", path, "}"), block$indent)
+  result <- indent(str_c("\\input{", path, "}"), block$indent)
   cache$set(hash, result)
   result  
 }

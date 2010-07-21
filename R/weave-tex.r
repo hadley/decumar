@@ -7,9 +7,9 @@ interweave_tex <- function(code, ..., envir = globalenv()) {
 
 weave_tex <- list(
   start = function(...) "\\begin{alltt}\n",
-  message = function(x, ...) ps("{\\bf ", escape_tex(gsub("\n", "", x)), "}\\\\\n") ,
-  warning = function(x, ...) ps("WARNING: ", escape_tex(x), "\n") ,
-  error = function(x, ...) ps("ERROR: ", escape_tex(x), "\n") ,
+  message = function(x, ...) str_c("{\\bf ", escape_tex(gsub("\n", "", x)), "}\\\\\n") ,
+  warning = function(x, ...) str_c("WARNING: ", escape_tex(x), "\n") ,
+  error = function(x, ...) str_c("ERROR: ", escape_tex(x), "\n") ,
   out = function(x, ...) escape_tex(x),
   src = function(x, ...) escape_tex(line_prompt(x)),
   value = function(x, ...) {
@@ -48,18 +48,18 @@ save_plot_tex <- function(
   gg_width = NULL, gg_height = NULL, dpi = 300,
   tex_width = NULL, tex_height = NULL, ...
 ) {
-  name <- ps(digest.ggplot(x), ".", filetype)
+  name <- str_c(digest.ggplot(x), ".", filetype)
   path <- file.path(outdir, name)
   
   try(ggsave(path, x, width = gg_width, height = gg_height, dpi = dpi))
   
   out <- image_tex(name, width=tex_width, height=tex_height)
-  if (comment) out <- ps(out, "%")
+  if (comment) out <- str_c(out, "%")
   out
 }
 
 highlight_tex <- function(x) {
-  ps(system("highlight -L --quiet --syntax r -f", intern=TRUE, input=x), collapse="\n")
+  str_c(system("highlight -L --quiet --syntax r -f", intern=TRUE, input=x), collapse="\n")
 }
 
 
