@@ -1,20 +1,14 @@
-# Requires highlight command line script
+is.comment <- function(x) str_detect(x, "^\\s*%")
 
-re <- function(string, regexp) {
-  seq_along(string) %in% grep(regexp, as.character(string))
-}
-is.comment <- function(x) re(x, "^\\s*%")
 is.block <-  function(x)  {
-  laply(x, 
-    function(x) re(x[1], ps("^\\s*%\\s+(", ps(blocks, collapse="|"), ")"))
-  )
-}
-is.block <-  function(x)  {
-  regexp <- ps("^\\s*%\\s+(", ps(block_types, collapse="|"), ")")
-  laply(x, function(x) re(x[1], regexp))
+  regexp <- str_c("^\\s*%\\s+(", str_c(blocks, collapse = "|"), ")")
+  
+  first_lines <- unlist(llply(x, "[", 1))
+  str_detect(first_lines, regexp)
 }
 is.end <-  function(x)  {
-  laply(x, function(x) re(x[1], "^\\s*% END"))
+  first_lines <- unlist(llply(x, "[", 1))
+  str_detect(first_lines, "^\\s*% END")
 }
 trim <- function(x) gsub("^\\s+|\\s+$", "", x)
 indent <- function(x, n = 2) {
@@ -92,3 +86,4 @@ parse_file <- function(path) {
   
   groups
 }
+

@@ -23,7 +23,8 @@ call_block <- function(block) {
     }
   }
   
-  res <- do.call(block$type, params)
+  block_f <- match.fun(str_c("block_", block$type))
+  res <- do.call(block_f, params)
   
   # Block evaluated only for its side effects
   if (res == "") {

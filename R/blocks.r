@@ -1,17 +1,6 @@
-block_types <- toupper(c(
-  "set_defaults", # Set up default parameters for the remainder of the file
-  "code",         # Runs code and displays nothing
-  "codelisting",  # Code + listing
-  "figure",       # Insert a floating figure containing graphics
-  "figlisting",   # Floating figure + code
-  "graphic",      # Insert a graphic into the document
-  "tabular",      # Insert a table
-  "table",        # Insert a floating table containing data
-  "output",       # Include output 
-  "listing",      # Pretty print code
-  "interweave"    # Output and listing interwoven
-))
-
+blocks <- c("CODE", "CODELISTING", "DEFAULTS", "FIGLISTING", "FIGURE", 
+"GRAPHIC", "INTERWEAVE", "LISTING")
+# toupper(str_replace(apropos("block_"), "block_", ""))
 
 .defaults <- list(
   outdir = "_include",
@@ -21,20 +10,20 @@ block_types <- toupper(c(
 )
 
 #' Set document defaults
-set_defaults <- function(code, ..., envir = globalenv()) {
+block_defaults <- function(code, ..., envir = globalenv()) {
   .defaults <<- defaults(list(...), .defaults)
   woven <- weave(code, envir)  
   ""
 }
 
 #' Evaluate code, but don't show it
-code <- function(code, ..., envir = globalenv()) {
+block_code <- function(code, ..., envir = globalenv()) {
   woven <- weave(code, envir)  
   ""
 }
 
 #' Show code, but don't evaluate it
-listing <- function(code, ...) {
+block_listing <- function(code, ...) {
   ps(
     "\\begin{alltt}\n",
     escape_tex(code),
@@ -43,10 +32,10 @@ listing <- function(code, ...) {
 }
 
 #' Interweave code and output, as if you had executed at the command line
-interweave <- function(...) interweave_tex(...)
+block_interweave <- function(...) interweave_tex(...)
 
 #' Embed a graphic
-graphic <- function(code, ..., envir = globalenv()) {
+block_graphic <- function(code, ..., envir = globalenv()) {
   woven <- weave(code, envir)  
   
   weave_graphics <- weave_nul
@@ -60,7 +49,7 @@ graphic <- function(code, ..., envir = globalenv()) {
 
 #' Embed a graphic in a floating figure block
 #' @param col number of columns
-figure <- function(code, ..., col = 2, envir = globalenv()) {
+block_figure <- function(code, ..., col = 2, envir = globalenv()) {
   woven <- weave(code, envir)  
 
   i <- 0
@@ -83,7 +72,7 @@ figure <- function(code, ..., col = 2, envir = globalenv()) {
 }
 
 #' Show figure along with the code that produced it
-figlisting <- function(...) {
+block_figlisting <- function(...) {
   paste(
     listing(...),
     figure(...),
@@ -92,7 +81,7 @@ figlisting <- function(...) {
 }
 
 #' Evaluate code and display listing separately
-codelisting <- function(...) {
+block_codelisting <- function(...) {
   code(...)
   listing(...)
 }
