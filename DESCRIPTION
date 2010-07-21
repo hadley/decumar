@@ -5,9 +5,11 @@ Version: 0.1
 Date: 2008-08-19
 Author: Hadley Wickham <h.wickham@gmail.com>
 Maintainer: Hadley Wickham <h.wickham@gmail.com>
-Description: 
+Description:
 URL: http://had.co.nz/plyr
-Depends: R (>= 2.7), plyr, eval.with.details, digest, highlight, stringr
-Suggests: RUnit, 
+Depends: R (>= 2.7), plyr, eval.with.details, digest, highlight,
+    stringr
 License: GPL
 LazyData: true
+Collate: 'block.r' 'blocks.r' 'cache.r' 'output.r' 'parser.r' 'utils.r'
+    'weave-.r' 'weave-tex.r'
