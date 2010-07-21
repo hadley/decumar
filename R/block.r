@@ -18,29 +18,29 @@ block_call <- function(block) {
   params <- c(list(code = block$code), block$params)
   params <- defaults(params, .defaults)
 
+  # Check cache
   hash <- digest(block)
   if (params$cache && block$type != "set_defaults") {
     hit <- cache_get(hash)
-    if (!is.null(hit)) {
-      # message("Cache hit: ", hash)
-      return(hit)
-    }
-    # message("Cache miss: ", hash)
+    if (!is.null(hit)) return(hit)
   }
-  # cache_set(hash, all)
   
   res <- do.call(block$type, params)
+  
+  # Block evaluated only for its side effects
   if (res == "") {
     cache_set(hash, "")
     return()
   }
 
+  # If inline, indent and return
   if (params$inline) {
     result <- indent(res, block$indent)
     cache_set(hash, result)
     return(result)
   }
   
+  # Otherwise save to file and constuct embedding statement
   outdir <- params$outdir
   if (!file.exists(outdir)) dir.create(outdir, recursive = TRUE)
   path <- file.path(outdir, ps(digest(res), ".tex"))
