@@ -10,19 +10,16 @@ is.end <-  function(x)  {
   first_lines <- unlist(llply(x, "[", 1))
   str_detect(first_lines, "^\\s*% END")
 }
-trim <- function(x) gsub("^\\s+|\\s+$", "", x)
+
 indent <- function(x, n = 2) {
   spaces <- ps(rep(" ", length = n))
   ps(spaces, gsub("\n", ps("\n", spaces), x))
 }
 
 strip_comment <- function(x) {
-  indent <- nchar(strsplit(x[1], "%")[[1]][1])
+  indent <- str_length(strsplit(x[1], "%")[[1]][1])
   
-  structure(
-    laply(x, function(x) gsub("^\\s*% ?", "", x)),
-    indent = indent
-  )
+  structure(str_replace(x, "^\\s*% ?", ""), indent = indent)
 }
 
 parse_block <- function(input) {
@@ -33,8 +30,8 @@ parse_block <- function(input) {
     stop("Parse error: No blank line\n\n", paste(input, collapse="\n"),
       call. = FALSE)
   }
-  type <- trim(block[1])
-  params <- trim(paste(block[seq(2, blank - 1)], collapse=" "))
+  type <- str_trim(block[1])
+  params <- str_trim(paste(block[seq(2, blank - 1)], collapse=" "))
   code <- paste(block[seq(blank + 1, length(block))], collapse="\n")
   
   structure(list(
@@ -51,7 +48,7 @@ parse_params <- function(params) {
 
   breaks <- sort(c(0, loc, loc + attr(loc, "match.length"), nchar(params) + 1))
   pieces <- substr(rep(params, length(breaks)), breaks[-length(breaks)], breaks[-1] - 1)
-  pieces <- trim(pieces[pieces != ""])
+  pieces <- str_trim(pieces[pieces != ""])
 
   even <- seq_along(pieces)
   even <- even[even %% 2 == 0]
