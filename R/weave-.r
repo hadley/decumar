@@ -58,3 +58,10 @@ weave_out_output <- function(output, f, ...) {
 "print.ewd-list" <- function(x, ...) {
   invisible(weave_out(x, weave_r))  
 }
+
+weave_nul <- list(
+  start = nul, stop  = nul,
+  message = nul, warning = nul, error = nul,
+  out = nul, value = nul, src = nul
+)
+

@@ -1,3 +1,18 @@
+block_types <- toupper(c(
+  "set_defaults", # Set up default parameters for the remainder of the file
+  "code",         # Runs code and displays nothing
+  "codelisting",  # Code + listing
+  "figure",       # Insert a floating figure containing graphics
+  "figlisting",   # Floating figure + code
+  "graphic",      # Insert a graphic into the document
+  "tabular",      # Insert a table
+  "table",        # Insert a floating table containing data
+  "output",       # Include output 
+  "listing",      # Pretty print code
+  "interweave"    # Output and listing interwoven
+))
+
+
 .defaults <- list(
   outdir = "_include",
   inline = TRUE,
@@ -25,9 +40,6 @@ listing <- function(code, ...) {
     escape_tex(code),
     "\\end{alltt}\n"
   )
-}
-
-raw <- function(code, ...) {
 }
 
 #' Interweave code and output, as if you had executed at the command line
