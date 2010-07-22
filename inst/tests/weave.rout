@@ -1,0 +1,12 @@
+\begin{alltt}
+> \# This example shows how tex weave works 
+>  
+> 1 + 1 
+[1] 2
+> message("Hi") 
+{\bf Hi}
+>  
+> \# Here's a plot 
+> plot(1:10) 
+\includegraphics[]{95eb72d27d811f14be65aeedceadd550}
+\end{alltt}

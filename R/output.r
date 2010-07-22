@@ -1,12 +1,14 @@
 #' Overwrite input with processed output
 #' 
-#' @param path path to file
+#' @param in_path path to input file
+#' @param out_path path where output should be saved.  Defaults to overwriting
+#'   input
 #' @param reset should result cache be emptied before processing?
 #' @export
-decumar <- function(path, clean = FALSE) {
+decumar <- function(in_path, out_path = in_path, clean = FALSE) {
   if (clean) cache$reset()
-  output <- process_file(path)
-  cat(output, file = path)
+  output <- process_file(in_path)
+  cat(output, file = out_path)
 }
 
 #' Process decumar file and return result as string
@@ -17,7 +19,7 @@ process_file <- function(path) {
   groups <- parse_file(path)
   results <- unlist(llply(groups, process_group, .progress = "text"))
 
-  str_c(c(results, "\n"), collapse = "\n")
+  str_c(c(results, ""), collapse = "\n")
 }
 
 #' Extract code from a decumar file.

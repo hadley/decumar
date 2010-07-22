@@ -1,0 +1,38 @@
+\documentclass{article}
+\usepackage{alltt}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.png,.pdf}
+
+\begin{document}
+
+% GRAPHIC
+%
+% plot(1:10)
+\includegraphics[height = 0.5\linewidth]{95eb72d27d811f14be65aeedceadd550}
+% END
+
+% INTERWEAVE
+%
+% plot(1:10, (1:10) ^ 2)
+\begin{alltt}
+> plot(1:10, (1:10) ^ 2) 
+\includegraphics[height = 0.5\linewidth]{348a9abbadb09cfa19b9f6de1dcb5686}
+\end{alltt}
+
+% END
+
+% FIGURE
+%   CAPTION: A simple plot
+%   LABEL: ggplot2
+%
+% library(ggplot2)
+% qplot(cty, hwy, data = mpg)
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width = 0.5\linewidth]{881d99b09d1d251fd6abb66c437405e0}
+  \caption{A simple plot}
+  \label{fig:ggplot2}
+\end{figure}
+% END
+
+\end{document}

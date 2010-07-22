@@ -3,7 +3,7 @@ blocks <- c("CODE", "CODELISTING", "DEFAULTS", "FIGLISTING", "FIGURE",
 # toupper(str_replace(apropos("block_"), "block_", ""))
 
 .defaults <- list(
-  outdir = "_include",
+  outdir = ".",
   inline = TRUE,
   cache = FALSE,
   gg_width = 4, gg_height = 4
@@ -12,63 +12,72 @@ blocks <- c("CODE", "CODELISTING", "DEFAULTS", "FIGLISTING", "FIGURE",
 #' Set document defaults
 block_defaults <- function(code, ..., envir = globalenv()) {
   .defaults <<- defaults(list(...), .defaults)
-  woven <- weave(code, envir)  
-  ""
+  evaluate(code, envir)
+  NULL
 }
 
 #' Evaluate code, but don't show it
 block_code <- function(code, ..., envir = globalenv()) {
-  woven <- weave(code, envir)  
-  ""
+  evaluate(code, envir)
+  NULL
 }
 
 #' Show code, but don't evaluate it
 block_listing <- function(code, ...) {
   str_c(
     "\\begin{alltt}\n",
-    escape_tex(code),
+    escape_tex(code), "\n",
     "\\end{alltt}\n"
   )
 }
 
 #' Interweave code and output, as if you had executed at the command line
-block_interweave <- function(...) interweave_tex(...)
-
-#' Embed a graphic
-block_graphic <- function(code, ..., envir = globalenv()) {
-  woven <- weave(code, envir)  
-  
-  weave_graphics <- weave_nul
-  weave_graphics$value <- function(x, ...) {
-    if (!inherits(x, "ggplot")) return()
-    save_plot_tex(x, ...)
-  }
-  
-  paste(weave_out(woven, weave_graphics, ...), collapse="\n")
+block_interweave <- function(code, plot_width = 4, plot_height = 4, tex_width = "0.5\\linewidth", tex_height = NULL, dpi = 300, ..., envir = globalenv()) {
+  texweave(evaluate(code, envir), list(dpi = dpi, 
+    plot_height = plot_height, plot_width = plot_width,
+    tex_height = tex_height, tex_width = tex_width))
 }
 
-#' Embed a graphic in a floating figure block
-#' @param col number of columns
-block_figure <- function(code, ..., col = 2, envir = globalenv()) {
-  woven <- weave(code, envir)  
-
-  i <- 0
-  weave_figure <- weave_tex
-  weave_figure$value <- function(x, ...) {
-    i <<- i + 1
-    if (!inherits(x, "ggplot")) return()
-    # Figures ignore warnings and errors
-
-    indent(save_plot_tex(x, ..., comment = i %% col))
-  }
-  weave_figure$out <- nul
-  weave_figure$src <- nul
-  weave_figure$start <- start_figure
-  weave_figure$stop <- end_figure
+#' Embed a plot.
+#' Displays the last plot produced by the code.
+block_graphic <- function(code, plot_width = 4, plot_height = 4, tex_width = "0.5\\linewidth", tex_height = NULL, dpi = 300, ..., envir = globalenv()) {
   
-  pieces <- weave_out(woven, weave_figure, ...)
-  pieces <- pieces[pieces != ""]
-  paste(pieces, collapse="\n")
+  plots <- Filter(is.recordedplot, evaluate(code, envir))
+  if (length(plots) == 0) return(NULL)
+  
+  last_plot <- plots[[length(plots)]]
+  texweave(last_plot, list(dpi = dpi, 
+    plot_height = plot_height, plot_width = plot_width,
+    tex_height = tex_height, tex_width = tex_width))
+}
+
+#' Display text output as is (no escaping of special characters)
+block_raw <- function(code, ..., envir = globalenv()) {  
+  text <- unlist(Filter(is.character, evaluate(code, envir)))
+  str_c(text, collapse = "")
+}
+
+#' Embed a plot in a floating figure block
+#' Display all plots produced by the code.
+#' @param col number of columns
+block_figure <- function(code, outdir = ".", plot_width = 4, plot_height = 4, tex_width = "0.5\\linewidth", tex_height = NULL, dpi = 300, position = "htpb", caption = NULL, label = NULL, ..., col = 2, envir = globalenv()) {
+  
+  plots <- Filter(is.recordedplot, evaluate(code, envir))
+  if (length(plots) == 0) return()
+
+  names <- unlist(lapply(plots, function(x) digest(x[[1]])))
+  l_ply(plots, save_plot, dir = outdir, width = plot_width, 
+    height = plot_height, dpi = dpi)
+
+  tex <- unlist(lapply(names, image_tex, height = tex_height, 
+    width = tex_width))
+  comments <- ifelse(seq_along(tex) %% col == 0, "%", "")
+  
+  str_c(
+    start_figure(position), "\n",
+    indent(str_c(tex, comments, collapse = "\n")), "\n",
+    end_figure(caption, label)
+  )
 }
 
 #' Show figure along with the code that produced it

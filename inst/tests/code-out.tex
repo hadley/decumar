@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage{alltt}
+
+\begin{document}
+
+% CODE 
+%
+% a <- 10
+
+% END
+
+% INTERWEAVE
+%
+% a
+% a + 10
+\begin{alltt}
+> a 
+[1] 10
+> a + 10 
+[1] 20
+
+\end{alltt}
+
+% END
+
+% LISTING
+%
+% b <- 10
+% print(b)
+\begin{alltt}
+b <- 10
+print(b)
+\end{alltt}
+
+% END
+
+% INTERWEAVE
+%
+% b
+\begin{alltt}
+> b 
+{\bf Error: object 'b' not found}
+
+\end{alltt}
+
+% END
+
+\end{document}

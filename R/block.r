@@ -27,8 +27,8 @@ call_block <- function(block) {
   res <- do.call(block_f, params)
   
   # Block evaluated only for its side effects
-  if (res == "") {
-    cache$set(hash, "")
+  if (is.null(res)) {
+    cache$set(hash, NULL)
     return()
   }
 

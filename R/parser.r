@@ -12,7 +12,7 @@ is.end <-  function(x)  {
 }
 
 indent <- function(x, n = 2) {
-  spaces <- str_c(rep(" ", length = n))
+  spaces <- str_c(rep(" ", length = n), collapse = "")
   str_c(spaces, gsub("\n", str_c("\n", spaces), x))
 }
 
