@@ -2,7 +2,7 @@
 #'   enough information so tex can discover them itself
 image_tex <- function(name, width = NULL, height = NULL, ...) {
   options <- unlist(compact(list(width = width, height = height)))
-  options_str <- str_c(names(options), options, sep = " = ", collapse = ", ")
+  options_str <- str_c(names(options), options, sep = "=", collapse = ", ")
   options_str <- str_c("[", options_str, "]")
   
   str_c("\\includegraphics", options_str, "{", name, "}")
@@ -32,8 +32,8 @@ start_figure <- function(position = "htbp", ...) {
 }
 end_figure <- function(caption, label, ...) {
   str_c(
-    indent(str_c("\\caption{", caption, "}\n")),
-    indent(str_c("\\label{fig:", label, "}\n")),
+    indent(str_c("\\caption{", caption, "}")), "\n",
+    indent(str_c("\\label{fig:", label, "}")), "\n",
     "\\end{figure}"
   )
 }

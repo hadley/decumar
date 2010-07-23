@@ -9,16 +9,16 @@ texweave.character <- function(x, options) escape_tex(x)
 texweave.source <- function(x, options) escape_tex(line_prompt(x$src))
 
 texweave.warning <- function(x, options) {
-  str_c("{\\bf Warning message: ", escape_tex(x$message), "}\n")
+  str_c("Warning message: ", escape_tex(x$message), "\n")
 }
 
 texweave.message <- function(x, options) {
   message <- str_replace(x$message, "\n$", "")
-  str_c("{\\bf ", escape_tex(message), "}\n")
+  str_c("", escape_tex(message), "\n")
 }
 
 texweave.error <- function(x, options) {
-  str_c("{\\bf Error: ", escape_tex(x$message), "}\n")
+  str_c("Error: ", escape_tex(x$message), "\n")
 }
 
 texweave.recordedplot <- function(x, options) {

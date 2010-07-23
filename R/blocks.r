@@ -3,10 +3,10 @@ blocks <- c("CODE", "CODELISTING", "DEFAULTS", "FIGLISTING", "FIGURE",
 # toupper(str_replace(apropos("block_"), "block_", ""))
 
 .defaults <- list(
-  outdir = ".",
+  outdir = "_include",
   inline = TRUE,
   cache = FALSE,
-  gg_width = 4, gg_height = 4
+  plot_width = 4, plot_height = 4
 )
 
 #' Set document defaults
@@ -60,7 +60,7 @@ block_raw <- function(code, ..., envir = globalenv()) {
 #' Embed a plot in a floating figure block
 #' Display all plots produced by the code.
 #' @param col number of columns
-block_figure <- function(code, outdir = ".", plot_width = 4, plot_height = 4, tex_width = "0.5\\linewidth", tex_height = NULL, dpi = 300, position = "htpb", caption = NULL, label = NULL, ..., col = 2, envir = globalenv()) {
+block_figure <- function(code, outdir = ".", plot_width = 4, plot_height = 4, tex_width = "0.5\\linewidth", tex_height = NULL, dpi = 300, position = "htbp", caption = NULL, label = NULL, ..., col = 2, envir = globalenv()) {
   
   plots <- Filter(is.recordedplot, evaluate(code, envir))
   if (length(plots) == 0) return()
@@ -71,7 +71,7 @@ block_figure <- function(code, outdir = ".", plot_width = 4, plot_height = 4, te
 
   tex <- unlist(lapply(names, image_tex, height = tex_height, 
     width = tex_width))
-  comments <- ifelse(seq_along(tex) %% col == 0, "%", "")
+  comments <- ifelse(seq_along(tex) %% col != 0, "%", "")
   
   str_c(
     start_figure(position), "\n",
