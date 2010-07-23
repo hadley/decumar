@@ -25,14 +25,15 @@ escape_tex <- function(x, newlines = FALSE) {
 #   \label{fig:label}
 # \end{figure}
 start_figure <- function(position = "htbp", ...) {
-  ps(
+  str_c(
     "\\begin{figure}[", position, "]\n",
     indent("\\centering")
   )
 }
 end_figure <- function(caption, label, ...) {
-  ps(indent(ps(
-    "\\caption{", caption, "}\n",
-    "\\label{fig:", label, "}"
-  )), "\n\\end{figure}")
+  str_c(
+    indent(str_c("\\caption{", caption, "}\n")),
+    indent(str_c("\\label{fig:", label, "}\n")),
+    "\\end{figure}"
+  )
 }
