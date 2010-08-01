@@ -7,7 +7,7 @@ process_group <- function(group) {
   input <- str_c(block$input, collapse = "\n")
   output <- call_block(block)
   end <- indent("\n% END", block$indent)
-  
+
   str_c(input, "\n", output, end)
 }
 
