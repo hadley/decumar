@@ -10,5 +10,5 @@ URL: http://had.co.nz/plyr
 Depends: R (>= 2.7), plyr, evaluate (>= 0.2), digest, stringr
 License: GPL
 LazyData: true
-Collate: 'block.r' 'blocks.r' 'cache.r' 'output.r' 'parser.r' 'plot.r'
-    'tex-utils.r' 'tex-weave.r' 'utils.r' 'defaults.r'
+Collate: 'block.r' 'blocks.r' 'cache.r' 'defaults.r' 'output.r'
+    'parser.r' 'plot.r' 'tex-utils.r' 'tex-weave.r' 'utils.r'

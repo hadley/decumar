@@ -1,3 +1,15 @@
+#' Weave evaluate output into tex.
+#' 
+#' @param x evaluate output
+#' @param options list of options used to control output
+#' @export
+#' @S3method texweave list
+#' @S3method texweave character
+#' @S3method texweave source
+#' @S3method texweave warning
+#' @S3method texweave message
+#' @S3method texweave error
+#' @S3method texweave recordedplot
 texweave <- function(x, options = list()) UseMethod("texweave", x)
 
 texweave.list <- function(x, options = list()) {
