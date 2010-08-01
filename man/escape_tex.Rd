@@ -7,3 +7,6 @@
   Escape latex special characters
 }
 \seealso{\url{http://ebooks.du.ac.in/latex/ltx-164.html}}
+\arguments{
+  \item{newlines}{if true, force latex newlines}
+}

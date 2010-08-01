@@ -9,7 +9,7 @@ image_tex <- function(name, width = NULL, height = NULL, ...) {
 }
 
 #' Escape latex special characters
-#' @arguments if true, force latex newlines
+#' @param newlines if true, force latex newlines
 #' @seealso \url{http://ebooks.du.ac.in/latex/ltx-164.html}
 escape_tex <- function(x, newlines = FALSE) {
   x <- gsub("([\\{}])", "\\\\verb|\\1|", x)

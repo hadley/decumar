@@ -1,4 +1,4 @@
-#' @returns complete path to saved plot (invisible)
+#' @return complete path to saved plot (invisible)
 save_plot <- function(plot, name = NULL, dir = NULL, 
   filetype = "pdf", width = NULL, height = NULL, dpi = 300) {
   
