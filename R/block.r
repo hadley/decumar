@@ -13,7 +13,7 @@ process_group <- function(group) {
 
 call_block <- function(block) {
   params <- c(list(code = block$code), block$params)
-  params <- defaults(params, .defaults)
+  params <- defaults$merge(params)
 
   # Check cache
   hash <- digest(block)

@@ -2,16 +2,9 @@ blocks <- c("CODE", "CODELISTING", "DEFAULTS", "FIGLISTING", "FIGURE",
 "GRAPHIC", "INTERWEAVE", "LISTING")
 # toupper(str_replace(apropos("block_"), "block_", ""))
 
-.defaults <- list(
-  outdir = "_include",
-  inline = TRUE,
-  cache = FALSE,
-  plot_width = 4, plot_height = 4
-)
-
-#' Set document defaults
+#' Set document defaults.
 block_defaults <- function(code, ..., envir = globalenv()) {
-  .defaults <<- defaults(list(...), .defaults)
+  defaults$set(list(...))
   evaluate(code, envir)
   NULL
 }
