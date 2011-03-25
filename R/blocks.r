@@ -16,20 +16,49 @@ block_code <- function(code, ..., envir = globalenv()) {
 }
 
 #' Show code, but don't evaluate it
-block_listing <- function(code, ...) {
-  str_c(
-    "\\begin{alltt}\n",
-    escape_tex(code), "\n",
-    "\\end{alltt}\n"
-  )
+block_listing <- function(code, prompt = jss, jss = FALSE, ...) {
+  if (prompt) {
+    src <- parse_all(code)$src
+    code <- str_c(unlist(lapply(src, line_prompt)), collapse = "")
+  }
+  
+  if (jss) {
+    code(code)
+  } else {
+    code <- escape_tex(code)
+    str_c("\\begin{alltt}\n", code, "\\end{alltt}\n")
+  }
 }
 
+
 #' Interweave code and output, as if you had executed at the command line
-block_interweave <- function(code, plot_width = 4, plot_height = 4, tex_width = "0.5\\linewidth", tex_height = NULL, dpi = 300, ..., envir = globalenv()) {
-  texweave(evaluate(code, envir), list(dpi = dpi, 
-    plot_height = plot_height, plot_width = plot_width,
-    tex_height = tex_height, tex_width = tex_width))
+block_interweave <- function(code, plot_width = 4, plot_height = 4, tex_width = "0.5\\linewidth", tex_height = NULL, dpi = 300, jss = FALSE, ..., envir = globalenv()) {  
+  options <- list(dpi = dpi, plot_height = plot_height, 
+    plot_width = plot_width, tex_height = tex_height, tex_width = tex_width)  
+  
+  if (jss) options$escape <- FALSE
+  
+  pieces <- texweave(evaluate(code, envir), options)
+  
+  if (jss) {
+    type <- vapply(pieces, function(x) attr(x, "type"), character(1))
+    
+    group <- cumsum(c(T, type[-1] != type[-length(type)]))
+    groups <- split(pieces, group)
+    groups <- vapply(groups, function(x) {
+      text <- str_c(unlist(x), collapse = "")
+      switch(attr(x[[1]], "type"), 
+        input = code_input(text), output = code_output(text))
+    }, character(1))
+    
+    code_chunk(str_c(groups, collapse = ""))
+  } else {
+    pieces <- str_c(unlist(pieces), collapse = "")
+    str_c("\\begin{alltt}\n", pieces, "\n\\end{alltt}\n", collapse = "")
+  }
 }
+
+
 
 #' Embed a plot.
 #' Displays the last plot produced by the code.
@@ -55,7 +84,9 @@ block_raw <- function(code, ..., envir = globalenv()) {
 #' @param col number of columns
 block_figure <- function(code, outdir = ".", plot_width = 4, plot_height = 4, tex_width = "0.5\\linewidth", tex_height = NULL, dpi = 300, position = "htbp", caption = NULL, label = NULL, ..., col = 2, envir = globalenv()) {
   
+  results <- evaluate(code, envir)
   plots <- Filter(is.recordedplot, evaluate(code, envir))
+
   if (length(plots) == 0) return()
 
   names <- unlist(lapply(plots, function(x) digest(x[[1]])))

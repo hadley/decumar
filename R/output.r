@@ -27,13 +27,16 @@ process_file <- function(path) {
 #' @param path path to file
 #' @param output output file, or \code{""} to print to screen
 #' @export
-output_code <- function(path, output_path = "") {
+output_code <- function(path, output_path = NULL) {
   groups <- parse_file(path)
   blocks <- llply(groups[is.block(groups)], parse_block)
   
   code <- llply(blocks, extract_code)
   output <- paste(code, collapse = "\n")
 
+  if (is.null(output_path)) {
+    output_path <- str_replace(path, "\\.tex", "\\.r")
+  }
   cat(output, file = output_path)
 }
 

@@ -10,32 +10,50 @@
 #' @S3method texweave message
 #' @S3method texweave error
 #' @S3method texweave recordedplot
-texweave <- function(x, options = list()) UseMethod("texweave", x)
-
-texweave.list <- function(x, options = list()) {
-  pieces <- str_c(unlist(lapply(x, texweave, options)), collapse = "")
-  str_c("\\begin{alltt}\n", pieces, "\n\\end{alltt}\n", collapse = "")
+texweave <- function(x, options = list()) {
+  options <- modifyList(list(escape = TRUE), options)
+  UseMethod("texweave", x)
 }
 
-texweave.character <- function(x, options) escape_tex(x)
-texweave.source <- function(x, options) escape_tex(line_prompt(x$src))
+r_input <- function(x) structure(x, type = "input")
+r_output <- function(x) structure(x, type = "output")
+
+texweave.list <- function(x, options = list()) {
+  lapply(x, texweave, options)
+}
+
+texweave.character <- function(x, options) {
+  if (options$escape) x <- escape_tex(x)
+  r_output(x)
+}
+texweave.source <- function(x, options) {
+  src <- line_prompt(x$src)
+  if (options$escape) src <- escape_tex(src)
+  
+  r_input(src)
+}
 
 texweave.warning <- function(x, options) {
-  str_c("Warning message: ", escape_tex(x$message), "\n")
+  msg <- if (options$escape) escape_tex(x$message) else x$message
+  
+  r_output(str_c("Warning message: ", msg, "\n"))
 }
 
 texweave.message <- function(x, options) {
   message <- str_replace(x$message, "\n$", "")
-  str_c("", escape_tex(message), "\n")
+  if (options$escape) message <- escape_tex(message)
+
+  r_output(str_c(message, "\n"))
 }
 
 texweave.error <- function(x, options) {
-  str_c("Error: ", escape_tex(x$message), "\n")
+  msg <- if (options$escape) escape_tex(x$message) else x$message
+  r_output(str_c("Error: ", msg, "\n"))
 }
 
 texweave.recordedplot <- function(x, options) {
   name <- digest(x[[1]])
   save_plot(x, name, options$outdir, width = options$plot_width, 
     height = options$plot_height, dpi = options$dpi)
-  image_tex(name, options$tex_height, options$tex_width)
+  r_output(image_tex(name, options$tex_height, options$tex_width))
 }

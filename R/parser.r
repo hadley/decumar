@@ -63,7 +63,8 @@ parse_params <- function(params) {
 
 print.block <- function(x, ...) {
   cat("Block (", x$type, ")\n", sep ="")
-  if (length(x$params) > 0) cat("  ", clist(x$params), "\n", sep = "")
+  if (length(x$params) > 0) 
+    cat("  ", str_c(names(x$params), " = '", unlist(x$params), "'", collapse = ", "), "\n", sep = "")
   cat("\n", indent(x$code), "\n\n", sep="")
 }
 
